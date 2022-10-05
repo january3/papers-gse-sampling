@@ -230,9 +230,6 @@ gseaStatRes <- do.call(rbind,
 leadingEdges <- mapply("[", list(names(pp$stats)), gseaStatRes[, "leadingEdge"], SIMPLIFY = FALSE)
 pathwayScores <- unlist(gseaStatRes[, "res"])
 
-
-
-
 foo <- do.call(rbind, fgsea_res_2)
 
 lead_edges <- mapply("[", list(names(pp$stats)), foo[, "leadingEdge"], SIMPLIFY = FALSE)
