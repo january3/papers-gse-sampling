@@ -28,6 +28,7 @@ covar  <- readRDS(covar_file)
 
 library(DESeq2)
 outputfile_fmt <- "deseq_obj_n_%06d_ss_%03d.rds"
+finished_file  <- file.path(outputdir, "finished_n_%d_ss_%d", n, ss)
 
 groups <- levels(factor(covar$group))
 stopifnot(length(groups) == 2)
@@ -36,6 +37,14 @@ g1 <- which(covar$group == groups[1])
 g2 <- which(covar$group == groups[2])
 
 for(i in 1:n) {
+  save_file <- file.path(outputdir, sprintf(outputfile_fmt, i, ss))
+  if(file.exists(save_file)) {
+    message(sprintf("file %s exists, skipping", save_file))
+    print(sprintf("file %s exists, skipping", save_file))
+    next()
+  }
+
+
   g1_sel <- sample(g1, ss)
   g2_sel <- sample(g2, ss)
   sel <- c(g1_sel, g2_sel)
@@ -44,11 +53,9 @@ for(i in 1:n) {
   ds <- DESeqDataSetFromMatrix(counts[,sel], colData=covar[sel, ], design=~ group)
   ds <- DESeq(ds)
 
-  save_file <- file.path(outputdir, sprintf(outputfile_fmt, i, ss))
-
   saveRDS(ds, file=save_file)
 }
 
-
+file.create(finished_file)
 
 
