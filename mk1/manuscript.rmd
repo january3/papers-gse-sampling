@@ -190,6 +190,7 @@ m -> toKeepLength (???)
 library(tidyverse)
 library(tmod)
 library(fgsea)
+library(BiocParallel)
 
 res <- results(ds2, name="disease_SC2_vs_no") %>% as.data.frame() %>%
   rownames_to_column("ENSEMBL") %>% left_join(annot, by="ENSEMBL") %>%
